@@ -108,6 +108,7 @@ new class extends Component {
 				'two_factor_recovery_codes'=> $this->two_factor_recovery_codes,
 				'two_factor_confirmed_at'=> $this->two_factor_confirmed_at,
         ];
+        // dd($data);
         if ($this->password) {
             $data['password'] = bcrypt($this->password);
         }
@@ -187,73 +188,85 @@ new class extends Component {
     </div>
     @volt
         <div>
-
             <flux:modal wire:model.self="showModal" variant="flyout">
                 <form wire:submit.prevent="save">
-                <div class="space-y-6">
-                    <div>
-                        <flux:heading size="lg">Input Data</flux:heading>
-                    </div>
-                    <flux:input type="hidden" placeholder="ID" wire:model="data_id" />
-                    
-<flux:ui.input.text name="name"  label="Name" type="text" />
-<flux:ui.input.text name="email"  label="Email" type="text" />
-<flux:ui.input.text name="email_verified_at"  label="Email Verified At" type="datetime-local" />
-<flux:input wire:model="password"  label="Password" type="password" viewable/>
-<flux:select name="role" label="Role" wire:model="role">
-    <option value="">-- Select Role --</option>
-    <option value="admin">Admin</option>
-    <option value="user">User</option>
-</flux:select>
+                    <div class="space-y-6">
+                        <div>
+                            <flux:heading size="lg">Input Data</flux:heading>
+                        </div>
+                        <flux:input type="hidden" placeholder="ID" wire:model="data_id" />
 
-                    <flux:ui.input.text name="created_at"  label="{{ $showTimestamp ? 'Created At' : '' }}" type="{{ $showTimestamp ? 'datetime-local' : 'hidden' }}" />
-                    <flux:ui.input.text name="updated_at"  label="{{ $showTimestamp ? 'Updated At' : '' }}" type="{{ $showTimestamp ? 'datetime-local' : 'hidden' }}" />
-                    <div class="flex">
-                        <flux:spacer />
-                        <flux:button variant="primary" type="submit">Save changes</flux:button>
+                        <flux:ui.input.text name="name" label="Name" type="text" />
+                        <flux:ui.input.text name="email" label="Email" type="text" />
+                        <flux:ui.input.text name="email_verified_at" label="Email Verified At" type="datetime-local" />
+                        <flux:input wire:model="password" label="Password" type="password" viewable />
+                        <flux:select name="role" label="Role" wire:model="role">
+                            <option value="">-- Select Role --</option>
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </flux:select>
+
+                        <flux:ui.input.text name="created_at"
+                            label="{{ $showTimestamp ? 'Created At' : '' }}"
+                            type="{{ $showTimestamp ? 'datetime-local' : 'hidden' }}" />
+                        <flux:ui.input.text name="updated_at"
+                            label="{{ $showTimestamp ? 'Updated At' : '' }}"
+                            type="{{ $showTimestamp ? 'datetime-local' : 'hidden' }}" />
+                        <div class="flex">
+                            <flux:spacer />
+                            <flux:button variant="primary" type="submit">Save changes</flux:button>
+                        </div>
                     </div>
-                </div>
                 </form>
             </flux:modal>
             <flux:ui.table.toolbar :showDeleteButton="$showDeleteButton" :showCreateButton=true />
-                <flux:ui.table :showCheckAll="$showCheckAll" :message="$message" :results="$results" :showDeleteButton="$showDeleteButton">
-                    <x-slot name="columns">
-                        <flux:ui.table.column label="Id" field="id" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true style="100px" />
-<flux:ui.table.column label="Name" field="name" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true  />
-<flux:ui.table.column label="Email" field="email" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true  />
-<flux:ui.table.column label="Email Verified At" field="email_verified_at" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true  />
-<flux:ui.table.column label="Role" field="role" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true  />
+            <flux:ui.table :showCheckAll="$showCheckAll" :message="$message" :results="$results"
+                :showDeleteButton="$showDeleteButton">
+                <x-slot name="columns">
+                    <flux:ui.table.column label="Id" field="id" :sortField="$sortField" :sortDirection="$sortDirection"
+                        sortable=true style="100px" />
+                    <flux:ui.table.column label="Name" field="name" :sortField="$sortField"
+                        :sortDirection="$sortDirection" sortable=true />
+                    <flux:ui.table.column label="Email" field="email" :sortField="$sortField"
+                        :sortDirection="$sortDirection" sortable=true />
+                    <flux:ui.table.column label="Email Verified At" field="email_verified_at" :sortField="$sortField"
+                        :sortDirection="$sortDirection" sortable=true />
+                    <flux:ui.table.column label="Role" field="role" :sortField="$sortField"
+                        :sortDirection="$sortDirection" sortable=true />
 
-                            @if ($showTimestamp)
-                            <flux:ui.table.column label="Created At" field="created_at" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true />
-                            <flux:ui.table.column label="Updated At" field="updated_at" :sortField="$sortField" :sortDirection="$sortDirection" sortable=true />
+                    @if($showTimestamp)
+                        <flux:ui.table.column label="Created At" field="created_at" :sortField="$sortField"
+                            :sortDirection="$sortDirection" sortable=true />
+                        <flux:ui.table.column label="Updated At" field="updated_at" :sortField="$sortField"
+                            :sortDirection="$sortDirection" sortable=true />
+                    @endif
+                    <flux:ui.table.column label="Action" style="width:200px" />
+                </x-slot>
+
+                <x-slot name="rows">
+                    @foreach($results as $row)
+                        <flux:ui.table.row :id="$row->id">
+                            @if($showCheckAll)
+                                <flux:ui.table.cell :showCheckBox=true :id="$row->id"></flux:ui.table.cell>
                             @endif
-                        <flux:ui.table.column label="Action" style="width:200px"/>
-                    </x-slot>
-                    <x-slot name="rows">
-                        @foreach ($results as $row)
-                            <flux:ui.table.row :id="$row->id">
-                                @if ($showCheckAll)
-                                    <flux:ui.table.cell :showCheckBox=true :id="$row->id"></flux:ui.table.cell>
-                                @endif
-                                    <flux:ui.table.cell>{{ $row->id }}</flux:ui.table.cell>
-<flux:ui.table.cell>{{ $row->name }}</flux:ui.table.cell>
-<flux:ui.table.cell>{{ $row->email }}</flux:ui.table.cell>
-<flux:ui.table.cell>{{ $row->email_verified_at }}</flux:ui.table.cell>
-<flux:ui.table.cell>{{ $row->role }}</flux:ui.table.cell>
+                            <flux:ui.table.cell>{{ $row->id }}</flux:ui.table.cell>
+                            <flux:ui.table.cell>{{ $row->name }}</flux:ui.table.cell>
+                            <flux:ui.table.cell>{{ $row->email }}</flux:ui.table.cell>
+                            <flux:ui.table.cell>{{ $row->email_verified_at }}</flux:ui.table.cell>
+                            <flux:ui.table.cell>{{ $row->role }}</flux:ui.table.cell>
 
-                                @if($showTimestamp)
+                            @if($showTimestamp)
                                 <flux:ui.table.cell>{{ $row->created_at }}</flux:ui.table.cell>
                                 <flux:ui.table.cell>{{ $row->updated_at }}</flux:ui.table.cell>
-                                @endif
-                                <flux:ui.table.cell style="float: right;">
-                                    <flux:ui.table.button.action :id="$row->id" :showDetail=false>
-                                    </flux:ui.table.button.action>
-                                </flux:ui.table.cell>
-                            </flux:ui.table.row>
-                        @endforeach
-                    </x-slot>
-                </flux:ui.table>
+                            @endif
+                            <flux:ui.table.cell style="float: right;">
+                                <flux:ui.table.button.action :id="$row->id" :showDetail=false>
+                                </flux:ui.table.button.action>
+                            </flux:ui.table.cell>
+                        </flux:ui.table.row>
+                    @endforeach
+                </x-slot>
+            </flux:ui.table>
         </div>
     @endvolt
 </x-layouts.admin>

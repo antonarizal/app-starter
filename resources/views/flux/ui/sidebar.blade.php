@@ -30,7 +30,7 @@
         x-cloak
         aria-label="Sidebar">
 
-        <div class="h-full px-3 py-4 overflow-y-auto bg-blue-50 dark:bg-gray-800 border-r-2 border-blue-100 dark:border-gray-700">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-white dark:bg-gray-800 border-r-1 border-zinc-100 dark:border-gray-700">
             <!-- Header Sidebar -->
             <div class="flex items-center justify-between ps-2.5 mb-5">
                 <a href="{{ url('/') }}" class="flex items-center">

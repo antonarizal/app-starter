@@ -30,7 +30,7 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-sky-50  dark:bg-zinc-800">
+<body class="min-h-screen bg-zinc-50  dark:bg-zinc-800">
     <flux:ui.sidebar>
         @foreach ($menus as $title => $menu)
             <flux:ui.sidebar.link :menu="$menu">
