@@ -78,7 +78,7 @@ new class extends Component {
  @volt
  <div>
    <div class="mb-3">
-        <flux:ui.breadcrumb :links="[['url' => '/', 'label' => 'Home'], ['label' => 'pengaturan']]" />
+        <flux:ui.breadcrumb :links="[['url' => '/', 'label' => 'Home'], ['label' => 'Pengaturan']]" />
     </div>
     <div class="w-full max-w-lg gap-2 bg-white dark:bg-gray-700 p-6 border border-default rounded-lg shadow-xs">
         <form wire:submit.prevent="save">
