@@ -26,9 +26,7 @@ new class extends Component {
     public $sortField = 'id';
     public $sortDirection = 'desc';
     public $showTimestamp = false;
-
     //Tambahkan nama column disini
-
     	public $id = '';
 		public $name = '';
 		public $email = '';
@@ -41,24 +39,9 @@ new class extends Component {
 		public $two_factor_secret = '';
 		public $two_factor_recovery_codes = '';
 		public $two_factor_confirmed_at = '';
-    public $columns = [
-    	['label'=>'Id',	'name'=>'id',	'type'=>'number',	'typeData'=>'integer'],
-		['label'=>'Name',	'name'=>'name',	 'type'=>'text',	'typeData'=>'varchar'],
-		['label'=>'Email',	'name'=>'email',	 'type'=>'text',	'typeData'=>'varchar'],
-		['label'=>'Email Verified At',	'name'=>'email_verified_at',	 'type'=>'datetime-local',	'typeData'=>'datetime'],
-		['label'=>'Password',	'name'=>'password',	 'type'=>'text',	'typeData'=>'varchar'],
-		['label'=>'Role',	'name'=>'role',	 'type'=>'text',	'typeData'=>'varchar'],
-		['label'=>'Remember Token',	'name'=>'remember_token',	 'type'=>'text',	'typeData'=>'varchar'],
-		['label'=>'Created At',	'name'=>'created_at',	 'type'=>'datetime-local',	'typeData'=>'datetime'],
-		['label'=>'Updated At',	'name'=>'updated_at',	 'type'=>'datetime-local',	'typeData'=>'datetime'],
-		['label'=>'Two Factor Secret',	'name'=>'two_factor_secret',	 'type'=>'textarea',	'typeData'=>'text'],
-		['label'=>'Two Factor Recovery Codes',	'name'=>'two_factor_recovery_codes',	 'type'=>'textarea',	'typeData'=>'text'],
-		['label'=>'Two Factor Confirmed At',	'name'=>'two_factor_confirmed_at',	 'type'=>'datetime-local',	'typeData'=>'datetime']
-    ];
     public function mount()
     {
         $user_id = auth()->user()->id;
-
     }
     public function with(): array
     {
@@ -195,7 +178,6 @@ new class extends Component {
                             <flux:heading size="lg">Input Data</flux:heading>
                         </div>
                         <flux:input type="hidden" placeholder="ID" wire:model="data_id" />
-
                         <flux:ui.input.text name="name" label="Name" type="text" />
                         <flux:ui.input.text name="email" label="Email" type="text" />
                         {{-- <flux:ui.input.text name="email_verified_at" label="Email Verified At" type="datetime-local" /> --}}
@@ -205,7 +187,6 @@ new class extends Component {
                             <option value="admin">Admin</option>
                             <option value="user">User</option>
                         </flux:select>
-
                         <flux:ui.input.text name="created_at"
                             label="{{ $showTimestamp ? 'Created At' : '' }}"
                             type="{{ $showTimestamp ? 'datetime-local' : 'hidden' }}" />
@@ -233,7 +214,6 @@ new class extends Component {
                         :sortDirection="$sortDirection" sortable=true /> --}}
                     <flux:ui.table.column label="Role" field="role" :sortField="$sortField"
                         :sortDirection="$sortDirection" sortable=true />
-
                     @if($showTimestamp)
                         <flux:ui.table.column label="Created At" field="created_at" :sortField="$sortField"
                             :sortDirection="$sortDirection" sortable=true />
@@ -242,7 +222,6 @@ new class extends Component {
                     @endif
                     <flux:ui.table.column label="Action" style="width:200px" />
                 </x-slot>
-
                 <x-slot name="rows">
                     @foreach($results as $row)
                         <flux:ui.table.row :id="$row->id">
@@ -254,7 +233,6 @@ new class extends Component {
                             <flux:ui.table.cell>{{ $row->email }}</flux:ui.table.cell>
                             {{-- <flux:ui.table.cell>{{ $row->email_verified_at }}</flux:ui.table.cell> --}}
                             <flux:ui.table.cell>{{ $row->role }}</flux:ui.table.cell>
-
                             @if($showTimestamp)
                                 <flux:ui.table.cell>{{ $row->created_at }}</flux:ui.table.cell>
                                 <flux:ui.table.cell>{{ $row->updated_at }}</flux:ui.table.cell>
