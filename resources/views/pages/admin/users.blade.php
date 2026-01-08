@@ -198,7 +198,7 @@ new class extends Component {
 
                         <flux:ui.input.text name="name" label="Name" type="text" />
                         <flux:ui.input.text name="email" label="Email" type="text" />
-                        <flux:ui.input.text name="email_verified_at" label="Email Verified At" type="datetime-local" />
+                        {{-- <flux:ui.input.text name="email_verified_at" label="Email Verified At" type="datetime-local" /> --}}
                         <flux:input wire:model="password" label="Password" type="password" viewable />
                         <flux:select name="role" label="Role" wire:model="role">
                             <option value="">-- Select Role --</option>
@@ -229,8 +229,8 @@ new class extends Component {
                         :sortDirection="$sortDirection" sortable=true />
                     <flux:ui.table.column label="Email" field="email" :sortField="$sortField"
                         :sortDirection="$sortDirection" sortable=true />
-                    <flux:ui.table.column label="Email Verified At" field="email_verified_at" :sortField="$sortField"
-                        :sortDirection="$sortDirection" sortable=true />
+                    {{-- <flux:ui.table.column label="Email Verified At" field="email_verified_at" :sortField="$sortField"
+                        :sortDirection="$sortDirection" sortable=true /> --}}
                     <flux:ui.table.column label="Role" field="role" :sortField="$sortField"
                         :sortDirection="$sortDirection" sortable=true />
 
@@ -252,7 +252,7 @@ new class extends Component {
                             <flux:ui.table.cell>{{ $row->id }}</flux:ui.table.cell>
                             <flux:ui.table.cell>{{ $row->name }}</flux:ui.table.cell>
                             <flux:ui.table.cell>{{ $row->email }}</flux:ui.table.cell>
-                            <flux:ui.table.cell>{{ $row->email_verified_at }}</flux:ui.table.cell>
+                            {{-- <flux:ui.table.cell>{{ $row->email_verified_at }}</flux:ui.table.cell> --}}
                             <flux:ui.table.cell>{{ $row->role }}</flux:ui.table.cell>
 
                             @if($showTimestamp)
