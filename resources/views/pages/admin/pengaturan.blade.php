@@ -23,8 +23,8 @@ new class extends Component {
     // }
     public function mount(): void
     {
-        $this->site_name = Option::where('option_name','site_name')->first()->option_value ?? '';
-        $this->site_description = Option::where('option_name','site_description')->first()->option_value ?? '';
+        $this->site_name = Option::getValue('site_name') ?? '';
+        $this->site_description = Option::getValue('site_description') ?? '';
     }
     public function save()
     {
@@ -37,25 +37,9 @@ new class extends Component {
         ];
         $site_name = Option::where('option_name','site_name')->first();
         $site_description = Option::where('option_name','site_name')->first();
-        if(!$site_name){
-            Option::create([
-                'option_name' => 'site_name',
-                'option_value'=>$this->site_name
-            ]);
-            Option::create([
-                'option_name' => 'site_description',
-                'option_value'=>$this->site_description
-            ]);
-            $submit = true;
-        }else{
-            Option::where('option_name','site_name')->update([
-                'option_name' => 'site_name',
-                'option_value'=>$this->site_name
-            ]);
-            Option::where('option_name','site_description')->update([
-                'option_name' => 'site_description',
-                'option_value'=>$this->site_description
-            ]);
+        $submit1 = Option::setValue('site_name', $this->site_name);
+        $submit2 = Option::setValue('site_description', $this->site_description);
+        if($submit1 && $submit2){
             $submit = true;
         }
         // $submit = DB::transaction(function () use ($data) {
