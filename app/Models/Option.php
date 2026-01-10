@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Option extends Model
 {
     /**
@@ -54,4 +55,28 @@ class Option extends Model
      * @var array
      */
     // protected $casts = [];
+    
+    public static function getValue($option_name){
+        $data = new Option();
+        $data = Option::where('option_name',$option_name)->first();
+        if($data){
+            return $data->option_value;
+        }else{
+            return null;
+        }
+    }    
+    
+    public static function setValue($option_name, $value){
+        $data = new Option();
+        $data = Option::where('option_name',$option_name)->first();
+        if($data){
+            $data->option_value = $value;
+            $data->save();
+        }else{
+            $data->option_name = $option_name;
+            $data->option_value = $value;
+            $data->save();
+        }
+        return true;
+    }
 }
