@@ -7,74 +7,249 @@ use function Laravel\Folio\{middleware};
 middleware(['auth', 'verified','adminAuth']);
 name('admin.pengaturan');
 use Livewire\Volt\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Option;
 new class extends Component {
-    public    $message= '';
+    use WithFileUploads;
+    
+    public $message = '';
     public $showModal,
         $data_id,
         $showConfirmModal,
         $showSuccessModal = false;
     public $option_name,
         $option_value;
-        public $site_name, $site_description;
-    //Tambahkan nama column disini
-    // public function with(): array
-    // {
-    // }
+    public $site_name, $site_description, $site_logo;
+    public $logo_preview, $logo_file;
+    
     public function mount(): void
     {
         $this->site_name = Option::getValue('site_name') ?? '';
         $this->site_description = Option::getValue('site_description') ?? '';
+        $logo_path = Option::getValue('site_logo') ?? '';
+        if ($logo_path && Storage::disk('public')->exists($logo_path)) {
+            $this->logo_preview = asset('storage/' . $logo_path);
+        }
     }
+    
+    public function updatedLogoFile()
+    {
+        $this->validate([
+            'logo_file' => 'image|max:2048', // maksimal 2MB
+        ]);
+        
+        $this->logo_preview = $this->logo_file->temporaryUrl();
+    }
+    
+    public function removeLogo()
+    {
+        dd('remove logo');
+        // $logo_path = Option::getValue('site_logo');
+        // if ($logo_path && Storage::disk('public')->exists($logo_path)) {
+        //     Storage::disk('public')->delete($logo_path);
+        //     Option::setValue('site_logo', '');
+        // }
+        
+        // $this->logo_file = null;
+        // $this->logo_preview = null;
+        // $this->message = 'Logo berhasil dihapus';
+    }
+    
     public function save()
     {
+        $this->validate([
+            'site_name' => 'required|string|max:255',
+            'site_description' => 'nullable|string',
+            'logo_file' => 'nullable|image|max:2048',
+        ]);
+        
         $submit = false;
-        $this->created_at = now();
-        $this->updated_at = now();
-        $data = [
-              	'option_name'=> $this->option_name,
-				'option_value'=> $this->option_value,
-        ];
-        $site_name = Option::where('option_name','site_name')->first();
-        $site_description = Option::where('option_name','site_name')->first();
+        
+        // Simpan logo jika ada file yang diupload
+        if ($this->logo_file) {
+            // Hapus logo lama jika ada
+            $old_logo = Option::getValue('site_logo');
+            if ($old_logo && Storage::disk('public')->exists($old_logo)) {
+                Storage::disk('public')->delete($old_logo);
+            }
+            
+            // Konversi gambar ke PNG dan simpan dengan nama site_logo.png
+            $logo_path = $this->saveLogoWithFixedName($this->logo_file);
+            
+            if ($logo_path) {
+                $submit3 = Option::setValue('site_logo', $logo_path);
+            } else {
+                $submit3 = false;
+                $this->addError('logo_file', 'Gagal menyimpan logo');
+            }
+        } else {
+            $submit3 = true;
+        }
+        
+        // Simpan data lainnya
         $submit1 = Option::setValue('site_name', $this->site_name);
         $submit2 = Option::setValue('site_description', $this->site_description);
-        if($submit1 && $submit2){
+        
+        if($submit1 && $submit2 && $submit3){
             $submit = true;
+            
+            // Reset preview jika ada file upload baru
+            if ($this->logo_file) {
+                $this->logo_file = null;
+                // Refresh preview dengan path yang baru
+                $logo_path = Option::getValue('site_logo');
+                if ($logo_path && Storage::disk('public')->exists($logo_path)) {
+                    $this->logo_preview = asset('storage/' . $logo_path . '?v=' . time());
+                }
+            }
         }
-        // $submit = DB::transaction(function () use ($data) {
-        //     if ($this->data_id) {
-        //         Option::find($this->data_id)->update($data);
-        //     } else {
-        //         Option::create($data);
-        //     }
-        //     return true;
-        // });
+        
         if ($submit) {
-            // $this->reset();
             $this->message = 'Data berhasil disimpan';
             $this->showSuccessModal = true;
         }
     }
+    
+    /**
+     * Simpan logo sebagai PNG dengan nama site_logo.png
+     */
+    private function saveLogoWithFixedName($file)
+{
+    try {
+        // Buat direktori jika belum ada
+        Storage::disk('public')->makeDirectory('logos');
+        
+        // Path untuk menyimpan file
+        $directory = 'logos';
+        $filename = 'site_logo.png';
+        
+        // Hapus file lama jika ada
+        $old_path = storage_path('app/public/' . $directory . '/' . $filename);
+        if (file_exists($old_path)) {
+            unlink($old_path);
+        }
+        
+        // Simpan file baru
+        $file->storeAs($directory, $filename, 'public');
+        
+        return $directory . '/' . $filename;
+        
+    } catch (\Exception $e) {
+        \Log::error('Error saving logo: ' . $e->getMessage());
+        return false;
+    }
+}
 };
 ?>
-<x-layouts.admin>
+<x-layouts.admin :title="__('Pengaturan')">
  @volt
  <div>
    <div class="mb-3">
         <flux:ui.breadcrumb :links="[['url' => '/', 'label' => 'Home'], ['label' => 'Pengaturan']]" />
     </div>
-    <div class="w-full max-w-lg gap-2 bg-white dark:bg-gray-700 p-6 border border-default rounded-lg shadow-xs">
+    <div class="w-full max-w-lg gap-2 bg-white dark:bg-zinc-800 p-6 border dark:border-zinc-700 border-default rounded-lg shadow-xs">
         <form wire:submit.prevent="save">
             <div class="space-y-6">
                 <h5 class="text-xl font-semibold text-heading mb-6">Pengaturan</h5>
+                
+                <div class="space-y-4">
                     <flux:input label="Site Name" wire:model="site_name" description="Nama situs" />
                     <flux:input label="Site Description" wire:model="site_description" description="Deskripsi situs" />
-                    <flux:button variant="primary" type="submit">Save</flux:button>
+                    
+                    <!-- Logo Upload Section -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-medium text-heading">Site Logo</label>
+                        <p class="text-xs text-muted">
+                        </p>
+                        
+                        <!-- Logo Preview -->
+                        <div class="mt-2">
+                            @if($logo_preview)
+                                <p class="text-sm text-muted mb-2">Preview:</p>
+                                <div class="relative inline-block">
+                                    <img src="{{ $logo_preview }}" 
+                                         alt="Logo Preview" 
+                                         class="w-40 h-40 object-contain border border-gray-300 dark:border-zinc-600 rounded-lg p-3 bg-gray-50 dark:bg-zinc-900">
+                                </div>
+    
+                            @else
+                                <div class="border-2 border-dashed border-gray-300 dark:border-zinc-600 rounded-lg p-8 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        <p class="text-sm text-gray-500 mb-2">Belum ada logo</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- File Input -->
+                        <div class="mt-4">
+                            <label class="block mb-2">
+                                <span class="text-sm font-medium text-heading">Upload Logo Baru</span>
+                                <p class="text-xs text-muted">Ganti logo dengan mengupload file baru  (maksimal 2MB)
+</p>
+                                
+                            </label>
+                            <input type="file" 
+                                   wire:model="logo_file" 
+                                   accept="image/*"
+                                   class="block w-full text-sm text-gray-500
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-lg file:border-0
+                                          file:text-sm file:font-medium
+                                          file:bg-primary/10 file:text-primary
+                                          hover:file:bg-primary/20
+                                          dark:file:bg-primary/20 dark:file:text-primary-light
+                                          dark:hover:file:bg-primary/30
+                                          transition-colors">
+                            @error('logo_file')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            
+                            <!-- Upload Progress -->
+                            @if($logo_file)
+                                <div wire:loading wire:target="logo_file" class="mt-2">
+                                    <div class="flex items-center space-x-2 text-sm text-primary">
+                                        <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                                        <span>Mengupload logo...</span>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <flux:button variant="primary" type="submit" wire:loading.attr="disabled">
+                            <span wire:loading.remove>Save</span>
+                            <span wire:loading wire:target="save">
+                                <div class="flex items-center space-x-2">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                    <span>Menyimpan...</span>
+                                </div>
+                            </span>
+                        </flux:button>
+                    </div>
                 </div>
+            </div>
         </form>
     </div>
-<flux:ui.modal.success message="{{ $message }}" />
+    
+    <!-- Success Modal -->
+    <flux:ui.modal.success message="{{ $message }}" wire:model="showSuccessModal" />
+    
+    <!-- Confirm Remove Modal -->
+    <flux:ui.modal.confirm 
+        wire:model="showConfirmModal"
+        title="Hapus Logo"
+        message="Apakah Anda yakin ingin menghapus logo saat ini?"
+        confirm-text="Ya, Hapus"
+        cancel-text="Batal"
+        wire:confirm="removeLogo()"
+    />
+    
     </div>
     @endvolt
 </x-layouts.admin>
