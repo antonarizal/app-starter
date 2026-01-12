@@ -1,21 +1,6 @@
-@php
-    $menus = [
-        'Dashboard' => [
-            'icon' => 'home',
-            'route' => 'dashboard',
-            'current' => request()->routeIs('dashboard'),
-        ],
-        'Siswa' => [
-            'icon' => 'users',
-            'route' => 'admin.siswa',
-            'current' => request()->routeIs('admin.siswa'),
-        ],
-        'Users' => [
-            'icon' => 'users',
-            'route' => 'admin.users',
-            'current' => request()->routeIs('admin.users'),
-        ],
-    ];
+@include('components.layouts.admin.menus')
+@php 
+    $menus = getMenus() ?? [];
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
@@ -33,11 +18,11 @@
 <body class="min-h-screen bg-white dark:bg-zinc-800">
     <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50  dark:border-zinc-700 dark:bg-zinc-900 ">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
-        <a href="{{ route('dashboard') }}" class="mr-5 flex items-center space-x-2 text-" wire:navigate>
+        <a href="{{ route('dashboard') }}" class="" wire:navigate>
             <x-app-logo />
         </a>
         <flux:navlist variant="outline">
-            <flux:navlist.group heading="Platform" class="grid ">
+            <flux:navlist.group class="grid ">
                 @foreach ($menus as $title => $menu)
                     @if (isset($menu['expandable']) && $menu['expandable'] == true)
                         <flux:navlist.group expandable :expanded="$menu['current']" heading="{{ $title }}"
