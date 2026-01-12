@@ -73,9 +73,11 @@ class Option extends Model
             $data->option_value = $value;
             $data->save();
         }else{
-            $data->option_name = $option_name;
-            $data->option_value = $value;
-            $data->save();
+            $data = Option::create([
+                'option_name' => $option_name,
+                'option_value' => $value,
+            ]);
+            
         }
         return true;
     }
