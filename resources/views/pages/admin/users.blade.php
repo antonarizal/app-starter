@@ -167,7 +167,7 @@ new class extends Component {
 ?>
 <x-layouts.admin :title="__('User')">
     <div class="mb-3">
-        <flux:ui.breadcrumb :links="[['url' => '/', 'label' => 'Home'], ['label' => 'User']]" />
+        <flux:ui.breadcrumb :links="[['url' => '/dashboard', 'label' => 'Admin'], ['label' => 'User']]" />
     </div>
     @volt
         <div>
