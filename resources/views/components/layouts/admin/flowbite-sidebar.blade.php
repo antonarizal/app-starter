@@ -1,21 +1,6 @@
-@php
-    $menus = [
-        'Dashboard' => [
-            'icon' => 'home',
-            'route' => 'dashboard',
-            'current' => request()->routeIs('dashboard'),
-        ],
-        'Users' => [
-            'icon' => 'users',
-            'route' => 'admin.users',
-            'current' => request()->routeIs('admin.users'),
-        ],
-        'Pengaturan' => [
-            'icon' => 'cog',
-            'route' => 'admin.pengaturan',
-            'current' => request()->routeIs('admin.pengaturan'),
-        ],
-    ];
+@include('components.layouts.admin.menus')
+@php 
+    $menus = getMenus() ?? [];
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
