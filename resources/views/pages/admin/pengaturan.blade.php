@@ -20,13 +20,19 @@ new class extends Component {
         $showSuccessModal = false;
     public $option_name,
         $option_value;
-    public $site_name, $site_description, $site_logo;
-    public $logo_preview, $logo_file;
+    public $site_name, 
+        $site_description, 
+        $site_logo, 
+        $address;
+    public 
+        $logo_preview, 
+        $logo_file;
     
     public function mount(): void
     {
         $this->site_name = Option::getValue('site_name') ?? '';
         $this->site_description = Option::getValue('site_description') ?? '';
+        $this->address = Option::getValue('address') ?? '';
         $logo_path = Option::getValue('site_logo') ?? '';
         if ($logo_path && Storage::disk('public')->exists($logo_path)) {
             $this->logo_preview = asset('storage/' . $logo_path);
@@ -61,6 +67,7 @@ new class extends Component {
         $this->validate([
             'site_name' => 'required|string|max:255',
             'site_description' => 'nullable|string',
+            'address' => 'nullable|string',
             'logo_file' => 'nullable|image|max:2048',
         ]);
         
@@ -90,6 +97,7 @@ new class extends Component {
         // Simpan data lainnya
         $submit1 = Option::setValue('site_name', $this->site_name);
         $submit2 = Option::setValue('site_description', $this->site_description);
+        $submit3 = Option::setValue('address', $this->address);
         
         if($submit1 && $submit2 && $submit3){
             $submit = true;
@@ -156,6 +164,7 @@ new class extends Component {
                 <div class="space-y-4">
                     <flux:input label="Site Name" wire:model="site_name" description="Nama situs" />
                     <flux:input label="Site Description" wire:model="site_description" description="Deskripsi situs" />
+                    <flux:input label="Address" wire:model="address" description="Alamat situs" />
                     
                     <!-- Logo Upload Section -->
                     <div class="space-y-3">
