@@ -158,9 +158,7 @@ new class extends Component {
     //Tambahkan nama column disini
 
     $state
-    public \$columns = [
-    $columns
-    ];
+    public \$columns = [];
     public function mount()
     {
         \$user_id = auth()->user()->id;
@@ -259,7 +257,7 @@ new class extends Component {
 ?>
 <x-layouts.admin :title="__('$modelName')">
     <div class="mb-3">
-        <flux:ui.breadcrumb :links="[['url' => '/', 'label' => 'Home'], ['label' => '$modelName']]" />
+        <flux:ui.breadcrumb :links="[['url' => '/dashboard', 'label' => 'Admin'], ['label' => '$modelName']]" />
     </div>
     @volt
         <div>
