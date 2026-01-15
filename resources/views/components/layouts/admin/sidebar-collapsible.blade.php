@@ -29,9 +29,7 @@
             <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
 
-        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
-        <a href="{{ route('dashboard') }}" class="" wire:navigate>
-        </a>
+
         <flux:sidebar.nav>
                 @foreach ($menus as $title => $menu)
                     @if (isset($menu['expandable']) && $menu['expandable'] == true)
@@ -90,7 +88,7 @@
                 </flux:menu.radio.group>
                 <flux:menu.separator />
                 <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Settings
+                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Profile
                     </flux:menu.item>
                 </flux:menu.radio.group>
                 <flux:menu.separator />
