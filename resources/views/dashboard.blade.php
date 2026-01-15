@@ -11,7 +11,7 @@
     <flux:icon.building-storefront class="size-8 mb-2 text-green-600 dark:text-green-200" variant="solid"/>
     <p class="text-zinc-800 dark:text-white font-semibold mb-1">Livewire</p>
     <p class="text-zinc-500 dark:text-zinc-200 text-sm">Version 3.7.0 or later</p>
-    <flux:icon.arrow-up-right class="size-4 text-zinc-500 group-hover:text-zinc-800 dark:fill-zinc-500 dark:group-hover:fill-white absolute top-4 right-4"/>
+    <flux:icon.arrow-up-right class="size-4 text-zinc-500 group-hover:text-zinc-800 dark:fill-zinc-500 dark:group-hover:fill-white absolute top-4 right-4"/> 
     
 </a>
 <a href="https://tailwindcss.com/docs/installation" target="_blank" class="group bg-blue-200! hover:bg-blue-300! dark:bg-blue-600! dark:hover:bg-blue-700! relative p-6 rounded-lg transition-colors duration-200">
