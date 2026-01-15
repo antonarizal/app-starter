@@ -1,5 +1,5 @@
-<x-layouts.admin.sidebar :title="$title ?? null">
+<x-layouts.admin.sidebar-collapsible :title="$title ?? null">
     <flux:main>
         {{ $slot }}
     </flux:main>
-</x-layouts.admin.sidebar>
+</x-layouts.admin.sidebar-collapsible>
