@@ -27,8 +27,8 @@
                                 </flux:select>
                             </div>
                             <div class="basis-4/6">
-                                <p class="pt-3 pl-2"> Page : {{ $results->currentPage() }} | Total Data :
-                                    {{ $results->total() }}</p>
+                                {{-- <p class="pt-3 pl-2"> Page {{ $results->currentPage() }} from {{ $results->lastPage() }} (Total Data :
+                                    {{ $results->total() }})</p> --}}
                             </div>
                         </div>
                     </div>

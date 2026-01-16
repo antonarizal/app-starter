@@ -179,7 +179,7 @@ new class extends Component {
         ];
     }
 } ?>
-<x-layouts.admin :title="__('Profile Settings')">
+<x-layouts.admin :title="__('Two Factor Settings')">
  @volt
  <div>
 <section class="w-full">
