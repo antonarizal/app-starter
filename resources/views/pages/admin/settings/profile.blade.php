@@ -1,4 +1,8 @@
 <?php
+use function Laravel\Folio\name;
+use function Laravel\Folio\{middleware};
+middleware(['auth', 'verified','adminAuth']);
+name('admin.profile.edit');
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +73,10 @@ new class extends Component {
     }
 }; ?>
 
+<x-layouts.admin :title="__('Profile Settings')">
+ @volt
+ <div>
+
 <section class="w-full">
     @include('partials.settings-heading')
 
@@ -114,3 +122,7 @@ new class extends Component {
         <livewire:settings.delete-user-form />
     </x-settings.layout>
 </section>
+
+</div>
+@endvolt
+</x-layouts.admin>

@@ -21,7 +21,9 @@ new class extends Component {
         $this->redirect('/', navigate: true);
     }
 }; ?>
-
+<x-layouts.admin :title="__('Delete Account')">
+ @volt
+ <div>
 <section class="mt-10 space-y-6">
     <div class="relative mb-5">
         <flux:heading>{{ __('Delete account') }}</flux:heading>
@@ -58,3 +60,6 @@ new class extends Component {
         </form>
     </flux:modal>
 </section>
+</div>
+@endvolt
+</x-layouts.admin>

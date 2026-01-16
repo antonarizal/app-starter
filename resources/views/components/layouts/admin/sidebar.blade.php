@@ -81,7 +81,7 @@
                 </flux:menu.radio.group>
                 <flux:menu.separator />
                 <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Profile
+                    <flux:menu.item href="/admin/settings/profile" icon="cog" wire:navigate>Profile
                     </flux:menu.item>
                 </flux:menu.radio.group>
                 <flux:menu.separator />

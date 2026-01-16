@@ -1,6 +1,6 @@
-{{-- <x-layouts.admin.sidebar :title="$title ?? null">
+{{-- <x-layouts.app.sidebar :title="$title ?? null">
     <flux:main>
         {{ $slot }}
     </flux:main>
-</x-layouts.admin.sidebar> --}}
-@include('components.layouts.admin')
+</x-layouts.app.sidebar> --}}
+    @include('components.layouts.admin')

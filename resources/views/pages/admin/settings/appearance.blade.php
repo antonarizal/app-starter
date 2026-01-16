@@ -1,10 +1,16 @@
 <?php
-
+use function Laravel\Folio\name;
+use function Laravel\Folio\{middleware};
+middleware(['auth', 'verified','adminAuth']);
+name('admin.appearance.edit');
 use Livewire\Volt\Component;
 
 new class extends Component {
     //
 }; ?>
+<x-layouts.admin :title="__('Appearance Settings')">
+ @volt
+ <div>
 
 <section class="w-full">
     @include('partials.settings-heading')
@@ -17,3 +23,6 @@ new class extends Component {
         </flux:radio.group>
     </x-settings.layout>
 </section>
+</div>
+@endvolt
+</x-layouts.admin>

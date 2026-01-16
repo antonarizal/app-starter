@@ -1,5 +1,8 @@
 <?php
-
+use function Laravel\Folio\name;
+use function Laravel\Folio\{middleware};
+middleware(['auth', 'verified','adminAuth']);
+name('admin.password.edit');
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -36,6 +39,10 @@ new class extends Component {
     }
 }; ?>
 
+
+<x-layouts.admin :title="__('Password Settings')">
+ @volt
+ <div>
 <section class="w-full">
     @include('partials.settings-heading')
 
@@ -77,3 +84,8 @@ new class extends Component {
         </form>
     </x-settings.layout>
 </section>
+
+
+</div>
+@endvolt
+</x-layouts.admin>
